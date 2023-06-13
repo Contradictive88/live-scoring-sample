@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Score</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Update Score</h1>
+    <button id="incrementBtn">Increment Score</button>
+    <div id="scoreDisplay"></div>
+
+    <script>
+        $(document).ready(function() {
+            // Function to fetch and display the score
+            function fetchScore() {
+                $.ajax({
+                    url: "view_score.php",
+                    type: "POST",
+                    data: { action: "fetch" },
+                    success: function(data) {
+                        $("#scoreDisplay").text("Score: " + data);
+                    }
+                });
+            }
+
+            // Increment the score when the button is clicked
+            $("#incrementBtn").click(function() {
+                $.ajax({
+                    url: "update_score.php",
+                    type: "POST",
+                    data: { action: "increment" },
+                    success: function() {
+                        // Fetch and update the score after incrementing
+                        fetchScore();
+                    }
+                });
+            });
+
+            // Periodically fetch and update the score every 5 seconds
+            setInterval(fetchScore, 5000);
+        });
+    </script>
+</body>
+</html>
